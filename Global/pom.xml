@@ -1,0 +1,141 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.companyname.projectname.audio</groupId>
+  <artifactId>Global</artifactId>
+  <packaging>jar</packaging>
+  <name>LBC</name>
+  <description>Audio File Information Project</description>
+  <!--<version>0.0.1-SNAPSHOT</version>-->
+  <version>1.0.0</version>
+  
+  <properties>
+  	<java.version>18</java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <jupiter.version>5.9.3</jupiter.version>
+    <slf4j.version>2.0.12</slf4j.version>
+    <log4j.version>2.22.1</log4j.version>
+    <mockito.version>5.11.0</mockito.version>
+  </properties>
+  
+  <dependencies>
+	  
+	<dependency>
+	    <groupId>org.apache.maven.plugins</groupId>
+	    <artifactId>maven-jar-plugin</artifactId>
+	    <version>3.3.0</version>
+	</dependency>
+	  
+	<dependency>
+	    <groupId>org.slf4j</groupId>
+	    <artifactId>slf4j-api</artifactId>
+	    <version>${slf4j.version}</version>
+	</dependency>
+    
+    <dependency>
+	    <groupId>org.apache.logging.log4j</groupId>
+	    <artifactId>log4j-api</artifactId>
+	    <version>${log4j.version}</version>
+	</dependency>
+    
+    <dependency>
+	    <groupId>org.apache.logging.log4j</groupId>
+	    <artifactId>log4j-core</artifactId>
+	    <version>${log4j.version}</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.slf4j</groupId>
+	    <artifactId>slf4j-log4j12</artifactId>
+	    <version>${slf4j.version}</version>
+	</dependency>
+	
+	<dependency>
+	   <groupId>org.slf4j</groupId>
+	   <artifactId>slf4j-simple</artifactId>
+	   <version>${slf4j.version}</version>
+	</dependency>
+	  
+	<dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-engine</artifactId>
+        <version>${jupiter.version}</version>
+        <scope>test</scope>
+    </dependency>
+ 
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>${jupiter.version}</version>
+        <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+	    <groupId>org.junit.jupiter</groupId>
+	    <artifactId>junit-jupiter-params</artifactId>
+	    <version>${jupiter.version}</version>
+	    <scope>test</scope>
+	</dependency>
+    
+	<dependency>
+	    <groupId>org.mockito</groupId>
+	    <artifactId>mockito-core</artifactId>
+	    <version>${mockito.version}</version>
+	    <scope>test</scope>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.mockito</groupId>
+	    <artifactId>mockito-junit-jupiter</artifactId>
+	    <version>${mockito.version}</version>
+	    <scope>test</scope>
+	</dependency>
+
+  </dependencies>
+  
+  <build>
+	  
+    <plugins>
+		
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <release>18</release>
+        </configuration>
+      </plugin>
+	    
+      <!-- Build an executable JAR using Maven Shade Plugin -->
+	  <plugin>
+	    <groupId>org.apache.maven.plugins</groupId>
+	    <artifactId>maven-shade-plugin</artifactId>
+	    <version>2.3</version>
+	    <executions>
+	       <!-- Run shade goal on package phase -->
+	       <execution>
+			  <phase>package</phase>
+			  <goals>
+				<goal>shade</goal>
+			  </goals>
+			  <configuration>
+			    <transformers>
+				  <!-- add Main-Class to manifest file -->
+                  <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+					<mainClass>com.companyname.projectname.audio.AudioFileFrameHeaderProcessor</mainClass>
+				  </transformer>
+			    </transformers>
+			  </configuration>
+	       </execution>
+	     </executions>
+	   </plugin>
+      
+    </plugins>
+    
+    <resources>
+		<resource>
+			<directory>src/main/resources</directory>
+			<filtering>true</filtering>
+		</resource>
+	</resources>
+	
+  </build>
+</project>
