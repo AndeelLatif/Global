@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -25,6 +26,8 @@ public class MP3FileParser implements FileParser {
 	
 	public static final String EMPTY_FILE_ARGUMENT_MESSAGE = "Empty argument passed for the fully qualified file name";
 	public static final String NO_AUDIO_HEADER_MESSAGE = "No audio header found within ";
+	public static final String NO_SUCH_FILE_MESSAGE = "No file found for ";
+	public static final String IO_PROBLEM = "IOException occurred whilst trying to parse ";
 	
 	private static final int FILE_BUFFER_SIZE = 5000;
 	private static final int HEADER_SIZE = 4;
@@ -55,7 +58,7 @@ public class MP3FileParser implements FileParser {
         return mp3File;
 	}
 	
-	private boolean parseMP3File(String fullyQualifiedFileName, long startByte, MP3AudioHeader mp3AudioHeader) throws IOException {
+	private boolean parseMP3File(String fullyQualifiedFileName, long startByte, MP3AudioHeader mp3AudioHeader) {
 		
 		Path path = Paths.get(fullyQualifiedFileName);
 		
@@ -78,10 +81,13 @@ public class MP3FileParser implements FileParser {
             	return false;
             }
 			
-		} catch (IOException iox) {
-            logger.error("IOException occurred whilst trying to find sync", iox);
-            throw iox;
-        }
+		} catch (NoSuchFileException nse) {
+			logger.error(NO_SUCH_FILE_MESSAGE + fullyQualifiedFileName, nse);
+			throw new AudioFileException(NO_SUCH_FILE_MESSAGE + fullyQualifiedFileName, nse);
+        } catch (IOException iox) {
+            logger.error(IO_PROBLEM + fullyQualifiedFileName, iox);
+            throw new AudioFileException(IO_PROBLEM + fullyQualifiedFileName, iox);
+        } 
 		
 		MP3File mp3File = new MP3File();
 		mp3File.setAudioHeader(mp3AudioHeader);

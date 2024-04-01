@@ -64,6 +64,12 @@ public class MP3FileParserTest {
 		assertTrue(ex.getMessage().startsWith("No audio header found within"));
 	}
 	
+	@Test
+	void parse_nonExistentFile() {
+		AudioFileException ex = assertThrows(AudioFileException.class, () -> fileParser.parse("src/test/resources/NonExistent.mp3").getAudioHeader());
+		assertTrue(ex.getMessage().startsWith(MP3FileParser.NO_SUCH_FILE_MESSAGE));
+	}
+	
 	// TODO further test cases - will require particular audio files for these:
 	// completely empty MP3 file, i.e. no frames - failure test
 	// corrupted MP3 file, e.g. missing expected data in the first frame - failure test
