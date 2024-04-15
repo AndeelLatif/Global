@@ -31,7 +31,6 @@ public class MP3FileParser implements FileParser {
 	
 	private static final int FILE_BUFFER_SIZE = 5000;
 	private static final int HEADER_SIZE = 4;
-	private static final byte[] HEADER = new byte[HEADER_SIZE];
 	
 	private final Logger logger = LoggerFactory.getLogger(MP3FileParser.class);
 	
@@ -95,12 +94,14 @@ public class MP3FileParser implements FileParser {
 	}
 	
     private AudioFrameDecoder parseMP3Header(ByteBuffer bb) throws AudioFileException {
+    	
+    	byte[] header = new byte[HEADER_SIZE];
         int position = bb.position();
-        bb.get(HEADER, 0, HEADER_SIZE);
+        bb.get(header, 0, HEADER_SIZE);
         bb.position(position);
         
         AudioFrameDecoder mp3FrameDecoder = new MP3FrameDecoder();
-        mp3FrameDecoder.decodeAudioFrameHeader(HEADER);
+        mp3FrameDecoder.decodeAudioFrameHeader(header);
 
         return mp3FrameDecoder;
     }
